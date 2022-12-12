@@ -1,0 +1,1 @@
+docker exec -it `docker ps -a | grep sd | head -1 | awk '{print $1}'` /bin/bash
