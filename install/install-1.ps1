@@ -26,7 +26,7 @@ Write-ColorOutput green ('Installing newest PowerShell instance and Windows Subs
 winget install --id Microsoft.Powershell --source winget --accept-source-agreements --accept-package-agreements
 winget install 9P9TQF7MRM4R --source msstore --accept-source-agreements --accept-package-agreements
 
-$command = "powershell.exe ""Start-Process pwsh -ArgumentList '-NoExit -ExecutionPolicy Bypass -file $scriptPath\install-2.ps1'"""
+$command = "powershell.exe ""Start-Process pwsh -ArgumentList '-ExecutionPolicy Bypass -file $scriptPath\install-2.ps1'"""
 
 if($hyperv) {
     New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\RunOnce" `

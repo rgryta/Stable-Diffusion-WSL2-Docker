@@ -18,12 +18,19 @@ Before following through with these instructions. Please verify below.
 1. You have Windows 11 Pro - you can also use Windows 11 Home (and according to some Stack Overflow comments also Windows 10), but you will have to perform manual installation and adjust it to your needs - e.g. Home edition needs a workaround in order to install Hyper-V.
 1. You have Nvidia GPU - this is mandatory for current configuration. Support for AMD is presumably possible, but won't be added until such request shows up.
 
+## How to use
+
+After installation simply execute run.bat file to start the Stable-Diffusion app. You can open it under [http://localhost:7860](http://localhost:7860).
+
+If you want to close the app - simply launch stop.bat, it will terminate the application and close the terminals.
+
+Note! Keep in mind that stop.bat will terminate and remove all containers based on Stable-Diffusion webui image. If you have downloaded additional models while the application was running - e.g. GAN models - they will have to be redownloaded again.
+
 ## Installation
 
 ### Automatic
 
-1. Run install.bat in order to install the Stable Diffusion - this process will restart your computer at the beginning, and will take a long time to download.
-1. Run run.bat from WSL in order to launch Stable-Diffusion app.
+Run install.bat in order to install the Stable Diffusion - this process will restart your computer at the beginning, and will take a long time to download.
 
 ### Manual
 
@@ -63,6 +70,9 @@ Before following through with these instructions. Please verify below.
 
 ## Sources
 
+1. [StabilityAI Stable-Diffusion GitHub](https://github.com/Stability-AI/stablediffusion)
+1. [StabilityAI Stable-Diffusion HuggingFace](https://huggingface.co/stabilityai/stable-diffusion-2-1)
+1. [AUTOMATIC1111 webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui)
 1. [Nvidia Container Runtime](https://nvidia.github.io/nvidia-container-runtime/)
 1. [Ubuntu GPU acceleration on WSL2](https://ubuntu.com/tutorials/enabling-gpu-acceleration-on-ubuntu-on-wsl2-with-the-nvidia-cuda-platform#3-install-nvidia-cuda-on-ubuntu)
 1. [MS WSL systemd](https://devblogs.microsoft.com/commandline/systemd-support-is-now-available-in-wsl/)

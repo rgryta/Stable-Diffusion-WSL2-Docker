@@ -1,0 +1,1 @@
+powershell.exe "Start-Process pwsh -ArgumentList '-ExecutionPolicy Bypass -file %~dp0\install\stop-and-remove.ps1'"
