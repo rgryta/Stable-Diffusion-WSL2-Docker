@@ -16,7 +16,7 @@ Before following through with these instructions. Please verify below.
 1. You have virtualization support - easiest way is to check if you can see "Virtualization" section in Windows Task Manager -> Performance -> CPU (it's located under "More details" if you don't see the Performance tab).
 1. You have virtualization enabled - you have to enable it in your BIOS if you don't.
 1. You have Windows 11 Pro - you can also use Windows 11 Home (and according to some Stack Overflow comments also Windows 10), but you will have to perform manual installation and adjust it to your needs - e.g. Home edition needs a workaround in order to install Hyper-V.
-1. You have Nvidia GPU - this is mandatory for current configuration. Support for AMD is presumably possible, but won't be added until such request shows up.
+1. You have Nvidia GPU - this is mandatory for current configuration. Support for AMD is presumably possible, but won't be added until such request shows up. Make sure you also have the newest drivers! Whole repository is based on CUDA 11.
 
 ## How to use
 

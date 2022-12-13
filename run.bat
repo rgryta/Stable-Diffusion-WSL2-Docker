@@ -1,1 +1,1 @@
-powershell.exe "Start-Process pwsh -ArgumentList '-ExecutionPolicy Bypass -file %~dp0\install\run.ps1'"
+powershell.exe "Start-Process pwsh -ArgumentList '-NoExit -ExecutionPolicy Bypass -file %~dp0\install\run.ps1'"

@@ -23,17 +23,42 @@ $distro = 'Ubuntu-Stable-Diffusion'
 # Option 1 (automatic setup)
 # Option 2 (interactive setup)
 if ($option -eq 1) {
-	Write-ColorOutput green ('Downloading Linux. This will take a while...') 
+	Write-ColorOutput green ('Downloading Linux. This will take a while (even few hours).') 
+	Write-ColorOutput yellow ('You can check if download is not stuck in Task Manager.') 
+	Write-ColorOutput yellow ('Process called: "The curl executable" -> verify activity in network column.') 
 	
 	# Using cURL as Invoke-WebRequest would sometimes get stuck and freeze PS
-	curl -L -o $scriptPath\Ubuntu.appx https://aka.ms/wslubuntu
+	# Remove curl alias to Invoke-WebRequest
+	Remove-item -Force alias:curl -ErrorAction SilentlyContinue
 	
-	$ignr = wsl --unregister $distro
+	$completed = $false
+	$response = $null
 
-	Rename-Item -Path $scriptPath\Ubuntu.appx -NewName $scriptPath\Ubuntu.zip
+	$ignr = wsl --unregister $distro	
+	while (-not $completed) {
+		try {
+			$response = curl -L -C - -o $scriptPath\Ubuntu.appx -w "%{http_code}\n" -s https://aka.ms/wslubuntu
+			if ($response -ne 200) {
+				throw "Expecting reponse code 200, was: $response"
+			}
+		} catch {
+			Write-ColorOutput red ('Failed download with code $response. Retrying...') 
+		}
+		
+		if ($response -eq 200) {
+			try {
+				Rename-Item -Path $scriptPath\Ubuntu.appx -NewName $scriptPath\Ubuntu.zip
 
-	Expand-Archive -Path $scriptPath\Ubuntu.zip -DestinationPath $scriptPath\tmp
-	Remove-Item $scriptPath\Ubuntu.zip
+				Expand-Archive -Path $scriptPath\Ubuntu.zip -DestinationPath $scriptPath\tmp
+				$completed = $true
+			} catch {
+				Remove-Item -Path $scriptPath\tmp -Recurse -ErrorAction SilentlyContinue
+				Write-ColorOutput red ('Failed download (server error) - corrupted archive. Retrying...') 
+			}
+		}
+		Remove-Item $scriptPath\Ubuntu.zip -ErrorAction SilentlyContinue
+	}
+
 
 	$ubuntuAPPX = (Get-ChildItem -Path $scriptPath\tmp\ -Filter *x64.appx).Basename
 	Rename-Item -Path $scriptPath\tmp\$ubuntuAPPX.appx -NewName $scriptPath\tmp\Ubuntu.zip
@@ -124,4 +149,4 @@ Write-ColorOutput green ('Now local container will be built. This can take about
 
 Start-Process pwsh -ArgumentList "-NoExit -ExecutionPolicy Bypass -file $scriptPath\build.ps1"
 
-Write-ColorOutput green ('You can close this window.')
+Write-ColorOutput green ('You can close this window now.')

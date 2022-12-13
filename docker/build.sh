@@ -1,1 +1,1 @@
-DOCKER_BUILDKIT=1 docker buildx build --no-cache -t sd:latest .
+DOCKER_BUILDKIT=1 docker buildx build -t sd:latest .

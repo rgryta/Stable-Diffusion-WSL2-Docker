@@ -37,11 +37,11 @@ USER sd
 
 # Python setup - PYTHONUNBUFFERED set to 1 makes logs pipe into the container output
 RUN pip install --upgrade pip
+# Torch support list based on https://github.com/pytorch/builder/blob/main/conda/pytorch-nightly/build.sh
+# and https://arnon.dk/matching-sm-architectures-arch-and-gencode-for-various-nvidia-cards/
 ENV PYTHONUNBUFFERED=1 \
 	PATH="$PATH:$SD_HOME/.local/bin" \
-	TORCH_CUDA_ARCH_LIST=All \
-	CUDA_VISIBLE_DEVICES=0 \
-	NVIDIA_VISIBLE_DEVICES=all \
+	TORCH_CUDA_ARCH_LIST=5.2;6.0;6.1;7.0;7.5;8.0;8.6 \
 	FORCE_CUDA=1
 
 # Clone AUTOMATIC1111 repo
@@ -54,6 +54,7 @@ USER sd
 
 COPY --chown=sd prep $SD_HOME/prep
 RUN cd $SD_HOME/prep && ./launch_prep.sh
+RUN cd $SD_HOME/prep && ./xformers.sh
 
 # Copy models
 COPY --from=dw_models --chown=sd /sd/ $SD_PROJECT/
