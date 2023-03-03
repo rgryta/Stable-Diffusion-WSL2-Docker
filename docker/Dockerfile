@@ -21,7 +21,7 @@ RUN wget -c https://huggingface.co/stabilityai/stable-diffusion-2-1/resolve/main
 
 
 ################ Main container ################
-FROM nvidia/cuda:11.8.0-devel-ubuntu22.04 as sd_webui
+FROM nvidia/cuda:12.0.1-devel-ubuntu22.04 as sd_webui
 
 ENV SD_HOME=/home/sd
 ENV SD_PROJECT=$SD_HOME/stable-diffusion-webui
@@ -41,7 +41,7 @@ RUN pip install --upgrade pip
 # and https://arnon.dk/matching-sm-architectures-arch-and-gencode-for-various-nvidia-cards/
 ENV PYTHONUNBUFFERED=1 \
 	PATH="$PATH:$SD_HOME/.local/bin" \
-	TORCH_CUDA_ARCH_LIST=5.2;6.0;6.1;7.0;7.5;8.0;8.6 \
+	TORCH_CUDA_ARCH_LIST=All \
 	FORCE_CUDA=1
 
 # Clone AUTOMATIC1111 repo
@@ -54,7 +54,6 @@ USER sd
 
 COPY --chown=sd prep $SD_HOME/prep
 RUN cd $SD_HOME/prep && ./launch_prep.sh
-RUN cd $SD_HOME/prep && ./xformers.sh
 
 # Copy models
 COPY --from=dw_models --chown=sd /sd/ $SD_PROJECT/

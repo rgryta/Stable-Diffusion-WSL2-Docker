@@ -1,1 +1,1 @@
-DOCKER_BUILDKIT=1 docker buildx build -t sd:latest .
+docker buildx build -t sd:latest .
