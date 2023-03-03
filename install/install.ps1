@@ -23,7 +23,7 @@ $scriptPath = Split-Path -Parent $MyInvocation.MyCommand.Definition
 $distro = 'ubuntu-stable-diffusion'
 $ignr = wsl --unregister $distro
 
-WSL-Ubuntu-Install -DistroAlias $distro -InstallPath $scriptPath # limit to jammy - update WSLTools for -Version when no -Interactive (lunar has no docker, and kinetic has no nvidia-container-toolkit)
+WSL-Ubuntu-Install -DistroAlias $distro -InstallPath $scriptPath -Version jammy # lunar has no docker, and kinetic has no nvidia-container-toolkit
 $ignr = wsl -d $distro -u root -e sh -c "apt-get install -y apt-utils sudo curl systemd"
 
 # Creating new user
@@ -78,16 +78,15 @@ $ignr = wsl -d $distro -u root -e sh -c "apt-get upgrade -y > /dev/null 2>&1 `&`
 # Testing Nvidia Docker
 Clear-Host
 Write-Host 'Pulling base NVIDIA CUDA container'
-Start-Sleep -Seconds 10
 $ignr = wsl -d $distro -u root -e sh -c "usermod -aG docker $username"
-$ignr = wsl -d $distro -e sh -c "docker pull nvidia/cuda:11.6.2-base-ubuntu20.04"
+$ignr = wsl -d $distro -e sh -c "docker pull nvidia/cuda:12.0.1-base-ubuntu22.04"
 
 Write-Host 'Verify if you are able to see your GPU below - this time within docker container:'
-wsl -d $distro -e sh -c "docker run --rm --gpus all nvidia/cuda:11.6.2-base-ubuntu20.04 nvidia-smi"
+wsl -d $distro -e sh -c "docker run --rm --gpus all nvidia/cuda:12.0.1-base-ubuntu22.04 nvidia-smi"
 
 Write-Host 'Now local container will be built. This can take about an hour depending on your CPU and internet speed.'
+wsl -d $distro -e sh -c "cd ``wslpath -a '$scriptPath'``/../docker && ./build.sh"
 
-# Build Stable Diffusion
-Start-Process pwsh -ArgumentList "-NoExit -ExecutionPolicy Bypass -file $scriptPath\build.ps1"
-
-Write-Host 'You can close this window now.'
+Clear-Host
+Write-Host 'You can now use `run.bat` to launch Stable Diffusion. Closing this window in 5 seconds...'
+Start-Sleep -Seconds 5
