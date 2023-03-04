@@ -1,1 +1,1 @@
-powershell.exe "Start-Process powershell -ArgumentList '-ExecutionPolicy Bypass -file %~dp0\install\stop-and-remove.ps1'"
+wsl -d ubuntu-stable-diffusion -e sh -c "cd `wslpath -a '%~dp0'`/docker && ./trunc-sd-containers.sh"

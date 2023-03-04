@@ -2,7 +2,7 @@
 
 ## About
 
-This repository is meant to allow for easy installation of Stable Diffusion on Windows. One click to install. Second click to run.
+This repository is meant to allow for easy installation of Stable Diffusion on Windows. One click to install. Second click to start.
 
 This setup is completely dependant on current versions of AUTOMATIC1111's webui repository and StabilityAI's Stable-Diffusion models.
 
@@ -20,7 +20,7 @@ Before following through with these instructions. Please verify below.
 
 ## How to use
 
-After installation simply execute run.bat file to start the Stable-Diffusion app. You can open it under [http://localhost:7860](http://localhost:7860).
+After installation simply execute start.bat file to start the Stable-Diffusion app. You can open it under [http://localhost:7860](http://localhost:7860).
 
 If you want to close the app - simply launch stop.bat, it will terminate the application and close the terminals.
 
