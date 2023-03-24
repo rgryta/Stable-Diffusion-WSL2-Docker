@@ -56,7 +56,7 @@ COPY --chown=sd prep $SD_HOME/prep
 RUN cd $SD_HOME/prep && ./launch_prep.sh
 
 # Copy models
-COPY --from=dw_models --chown=sd /sd/ $SD_PROJECT/
+COPY --from=dw_models --chown=sd --chmod=744 /sd/ $SD_PROJECT/
 
 # Download cache
 RUN cd $SD_HOME/prep && ./web_prep.sh
