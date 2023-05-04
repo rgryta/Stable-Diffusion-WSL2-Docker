@@ -52,7 +52,7 @@ USER root
 RUN cd $SD_PROJECT && python3 -m venv venv/ && chown -R sd venv
 USER sd
 
-COPY --chown=sd --chmod=744 prep $SD_HOME/prep
+COPY --chown=sd --chmod=755 prep $SD_HOME/prep
 RUN cd $SD_HOME/prep && ./launch_prep.sh
 
 # Copy models
