@@ -1,6 +1,6 @@
-from launch import prepare_environment
-import sys
+from launch import prepare_environment, args
 
-sys.argv.append("--skip-torch-cuda-test")
-sys.argv.append("--xformers")
+args.skip_torch_cuda_test=True
+args.xformers=True
+
 prepare_environment()

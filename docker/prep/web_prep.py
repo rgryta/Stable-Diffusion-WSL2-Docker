@@ -1,5 +1,6 @@
 from webui import initialize
-import sys
+from modules.launch_utils import args
 
-sys.argv.append("--skip-torch-cuda-test")
+args.skip_torch_cuda_test=True
+
 initialize()
