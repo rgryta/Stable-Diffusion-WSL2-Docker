@@ -3,4 +3,5 @@ from modules.launch_utils import args
 
 args.skip_torch_cuda_test=True
 
-initialize()
+initialize.imports()
+initialize.initialize()
