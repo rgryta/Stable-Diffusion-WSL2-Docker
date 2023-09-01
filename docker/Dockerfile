@@ -6,18 +6,15 @@ RUN mkdir /sd
 
 # Stable diffusion models
 RUN mkdir -p /sd/models/Stable-diffusion
-WORKDIR sd/models/Stable-diffusion
-RUN wget -c https://huggingface.co/stabilityai/stable-diffusion-2-1/resolve/main/v2-1_768-ema-pruned.ckpt -O 768-v-ema.ckpt && \
-	wget -c https://raw.githubusercontent.com/Stability-AI/stablediffusion/main/configs/stable-diffusion/v2-inference-v.yaml -O 768-v-ema.yaml
+WORKDIR /sd/models/Stable-diffusion
+RUN wget -c https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0/resolve/main/sd_xl_base_1.0.safetensors -O sd_xl_base_1.0.safetensors
+RUN wget -c https://huggingface.co/stabilityai/stable-diffusion-xl-refiner-1.0/resolve/main/sd_xl_refiner_1.0.safetensors -O sd_xl_refiner_1.0.safetensors
 
-#RUN wget -c https://huggingface.co/stabilityai/stable-diffusion-2-depth/resolve/main/512-depth-ema.ckpt -O 512-depth-ema.ckpt && \
-#	wget -c https://raw.githubusercontent.com/Stability-AI/stablediffusion/main/configs/stable-diffusion/v2-midas-inference.yaml -O 512-depth-ema.yaml
+RUN mkdir -p /sd/models/VAE
+WORKDIR /sd/models/VAE
+RUN wget -c https://huggingface.co/stabilityai/sdxl-vae/resolve/main/sdxl_vae.safetensors -O sdxl_vae.safetensors
 
-#RUN wget -c https://huggingface.co/stabilityai/stable-diffusion-x4-upscaler/resolve/main/x4-upscaler-ema.ckpt -O x4-upscaler-ema.ckpt && \
-#	wget -c https://raw.githubusercontent.com/Stability-AI/stablediffusion/main/configs/stable-diffusion/x4-upscaling.yaml -O x4-upscaler-ema.yaml
-
-#RUN wget -c https://huggingface.co/stabilityai/stable-diffusion-2-inpainting/resolve/main/512-inpainting-ema.ckpt -O 512-inpainting-ema.ckpt && \
-#	wget -c https://raw.githubusercontent.com/Stability-AI/stablediffusion/main/configs/stable-diffusion/v2-inpainting-inference.yaml -O 512-inpainting-ema.yaml
+# Add/Modify used models here
 
 
 ################ Main container ################
@@ -50,6 +47,7 @@ RUN cd $SD_HOME && git clone https://github.com/AUTOMATIC1111/stable-diffusion-w
 # Set up virtual python environment
 USER root
 RUN cd $SD_PROJECT && python3 -m venv venv/ && chown -R sd venv
+RUN sudo apt-get install google-perftools -y
 USER sd
 
 COPY --chown=sd --chmod=755 prep $SD_HOME/prep
@@ -67,4 +65,4 @@ RUN rm -r $SD_HOME/prep
 WORKDIR $SD_PROJECT
 
 EXPOSE 7860/tcp
-CMD ["/bin/bash", "-c", "./webui.sh --xformers --listen --port 7860"]
+CMD ["/bin/bash", "-c", "./webui.sh --xformers --listen --port 7860 --vae-path \"$SD_PROJECT/models/VAE/sdxl_vae.safetensors\""]
