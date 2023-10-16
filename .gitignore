@@ -1,1 +1,2 @@
-/install/ext4.vhdx
+*.vhdx
+.idea
