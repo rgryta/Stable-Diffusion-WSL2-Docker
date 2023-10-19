@@ -45,4 +45,4 @@ RUN rm -r $SD_HOME/prep
 WORKDIR $SD_PROJECT
 
 EXPOSE 7860/tcp
-CMD ["/bin/bash", "-c", "./webui.sh --listen --port 7860"]
+CMD ["/bin/bash", "-c", "./webui.sh --listen --port 7860 --enable-insecure-extension-access"]
