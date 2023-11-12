@@ -90,7 +90,7 @@ wsl -d $distro -e sh -c "mkdir -p /home/sd/stable-diffusion-webui"
 wsl -d $distro -e sh -c "docker volume create --driver local --opt type=none --opt device=/home/sd/stable-diffusion-webui --opt o=bind sd_vol"
 wsl -d $distro -e sh -c "docker create -v sd_vol:/home/sd/stable-diffusion-webui -p 127.0.0.1:7860:7860 --name sd --gpus all sd"
 
-wsl -d $distro -e sh -c "./provision.sh"
+wsl -d $distro -e sh -c "cd ``wslpath -a '$scriptPath'`` && ./provision.sh"
 
 Write-Host 'You can now use `start.bat` to launch Stable Diffusion. Closing this window in 5 seconds...'
 Start-Sleep -Seconds 5
