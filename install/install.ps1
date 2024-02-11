@@ -76,17 +76,21 @@ $ignr = wsl -d $distro -u root -e sh -c 'systemctl restart docker'
 $ignr = wsl -d $distro -u root -e sh -c "apt-get upgrade -y > /dev/null 2>&1 `&`& apt-get autoremove -y `&`& apt-get autoclean -y"
 
 # Testing Nvidia Docker
-Clear-Host
 Write-Host 'Pulling base NVIDIA CUDA container'
 $ignr = wsl -d $distro -u root -e sh -c "usermod -aG docker $username"
-$ignr = wsl -d $distro -e sh -c "docker pull nvidia/cuda:12.0.1-base-ubuntu22.04"
+$ignr = wsl -d $distro -e sh -c "docker pull nvidia/cuda:12.1.1-base-ubuntu22.04"
 
 Write-Host 'Verify if you are able to see your GPU below - this time within docker container:'
-wsl -d $distro -e sh -c "docker run --rm --gpus all nvidia/cuda:12.0.1-base-ubuntu22.04 nvidia-smi"
+wsl -d $distro -e sh -c "docker run --rm --gpus all nvidia/cuda:12.1.1-base-ubuntu22.04 nvidia-smi"
 
 Write-Host 'Now local container will be built. This can take about an hour depending on your CPU and internet speed.'
 wsl -d $distro -e sh -c "cd ``wslpath -a '$scriptPath'``/../docker && ./build.sh"
 
-Clear-Host
-Write-Host 'You can now use `run.bat` to launch Stable Diffusion. Closing this window in 5 seconds...'
+wsl -d $distro -e sh -c "mkdir -p /home/sd/stable-diffusion-webui"
+wsl -d $distro -e sh -c "docker volume create --driver local --opt type=none --opt device=/home/sd/stable-diffusion-webui --opt o=bind sd_vol"
+wsl -d $distro -e sh -c "docker create -v sd_vol:/home/sd/stable-diffusion-webui -p 127.0.0.1:7860:7860 --name sd --gpus all sd"
+
+wsl -d $distro -e sh -c "cd ``wslpath -a '$scriptPath'`` && ./provision.sh"
+
+Write-Host 'You can now use `start.bat` to launch Stable Diffusion. Closing this window in 5 seconds...'
 Start-Sleep -Seconds 5

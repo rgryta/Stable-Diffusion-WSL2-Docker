@@ -1,0 +1,1 @@
+docker container stop `docker ps -a | grep sd | awk '{print $1}' | awk 'BEGIN { ORS = " " } { print }'`

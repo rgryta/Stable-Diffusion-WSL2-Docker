@@ -1,0 +1,7 @@
+{
+    "sd_vae": "sdxl_vae.safetensors",
+    "quicksettings_list": [
+        "sd_model_checkpoint",
+        "sd_vae"
+    ]
+}
