@@ -34,6 +34,8 @@ Run install.bat in order to install the Stable Diffusion. This will take a while
 
 ### Manual
 
+#### WSL
+
 1. Install Windows 11
 1. Install WSL from MS Store (https://www.microsoft.com/store/productId/9P9TQF7MRM4R)
 1. Search for "Turn Windows features on or off" and enable "Hyper-V"
@@ -45,6 +47,8 @@ Run install.bat in order to install the Stable Diffusion. This will take a while
 1. Shutdown all distros `wsl --shutdown` and restart the one we're using `wsl --distribution Ubuntu`
 1. Make sure you have nvidia drivers installed on Windows
 1. Now open WSL. From now on, everything is executed from there.
+
+#### Docker
 1. Execute following scripts (installs cuda drivers):
 	```bash
 	sudo apt-key del 7fa2af80
@@ -61,19 +65,38 @@ Run install.bat in order to install the Stable Diffusion. This will take a while
 	curl https://get.docker.com | sh \
 	&& sudo systemctl --now enable docker
 	```
-1. Prepare gpg keys to install nvidia-docker:
-	```bash
-	distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \
-	&& curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg \
-	&& curl -s -L https://nvidia.github.io/libnvidia-container/$distribution/libnvidia-container.list | \
+1. Prepare gpg keys to install nvidia-docker as per https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html#installing-with-apt
+```
+	curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg \
+	&& curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | \
 	sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
 	sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
-	```
+```
 1. Now we can install it: `sudo apt-get install -y nvidia-docker2`
 1. Restart docker service: `sudo systemctl restart docker`
 1. Check if docker container also sees your GPU: `sudo docker run --rm --gpus all nvidia/cuda:12.0.1-base-ubuntu22.04 nvidia-smi`
-1. Run `./build.sh` from repo directory to build the container. You can uncomment depth, upscaler, inpainting and gfpgan from Dockerfile (first generated image) but it will take much more space - default installation is ~25GB total.
-1. Run `./run.sh` to start container. Open http://localhost:7860 to access the webui - you can do so from Windows of course.
+
+#### New Docker Container
+1. `docker compose up --force-recreate -d`
+1. If everything started great and no errors you can run the instance in the background `docker compose up -d`
+
+#### Old Docker Container Method (doesn't work)
+1. Run `sh docker/build.sh` from repo directory to build the container. You can uncomment depth, upscaler, inpainting and gfpgan from Dockerfile (first generated image) but it will take much more space - default installation is ~25GB total.
+1. Run `sh docker/run.sh` to start container. Open http://localhost:7860 to access the webui - you can do so from Windows of course.
+
+## Development
+If you wish to make changes to this repository and test your changes, the following steps will help.
+
+1. Fork this repository
+1. Create a branch called "dev"
+1. Created a file called "docker-compose.override.yml" with the following contents in the repository root.
+```
+services:
+  sd:
+    container_name: sd-dev
+    build: https://github.com/rgryta/Stable-Diffusion-WSL2-Docker.git#dev:docker  # Set to your github repostiory fork
+```
+1. Run `docker compose up --force-recreate -d`
 
 ## Sources
 

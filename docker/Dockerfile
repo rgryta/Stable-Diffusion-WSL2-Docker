@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install software-properties-common -y
 RUN add-apt-repository ppa:deadsnakes/ppa -y
 RUN ln -snf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime && echo $CONTAINER_TIMEZONE > /etc/timezone
 RUN apt-get install --no-install-recommends --no-install-suggests -y \
-		sudo git g++ python3.11 python3.11-distutils python3.11-venv python3.11-dev ffmpeg libsm6 libxext6 curl wget vim
+		sudo git g++ python3.11 python3.11-distutils python3.11-venv python3.11-dev ffmpeg libsm6 libxext6 curl wget vim bc
 RUN curl -sS https://bootstrap.pypa.io/get-pip.py | python3.11
 
 # Create Stable Diffusion user

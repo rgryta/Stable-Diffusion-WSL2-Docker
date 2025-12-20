@@ -1,2 +1,2 @@
 echo "Starting container"
-docker start -a sd
+docker start sd

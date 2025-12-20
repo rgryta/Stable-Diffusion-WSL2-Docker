@@ -1,0 +1,14 @@
+services:
+  sd:
+    # build: docker  # Local source
+    build: https://github.com/rgryta/Stable-Diffusion-WSL2-Docker.git#main:docker
+    container_name: sd
+    ports:
+       - "7860:7860"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu] 
